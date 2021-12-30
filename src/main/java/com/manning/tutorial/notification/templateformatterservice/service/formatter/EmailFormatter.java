@@ -17,6 +17,7 @@ public class EmailFormatter {
     private static final String EMAIL_DIRECTORY_PATH = "./src/main/resources/templates/email/";
     private static final String HTML_SUFFIX = ".html";
     private static final String EMAIL_DIRECTORY = "./email/";
+    private static final String PHONE_NUMBER_CHANGED = "PhoneNumberChanged";
     private final TemplateEngine templateEngine;
 
     public TemplateResponse format(TemplateRequest templateRequest) {
@@ -25,7 +26,11 @@ public class EmailFormatter {
         File emailTemplateFile = getFile(templateRequest);
         if (emailTemplateFile.exists()) {
             String notificationContent = templateEngine.process(EMAIL_DIRECTORY + templateRequest.getNotificationTemplateName() + HTML_SUFFIX, context);
-            return prepareResponse("SUCCESS", "Successfully merged the template with the template parameters", notificationContent, null, "Your Bank Balance");
+            if (templateRequest.getNotificationTemplateName().equals(PHONE_NUMBER_CHANGED)) {
+                return prepareResponse("SUCCESS", "Successfully merged the template with the template parameters", notificationContent, null, "Changed phone number");
+            } else {
+                return prepareResponse("SUCCESS", "Successfully merged the template with the template parameters", notificationContent, null, "Your Bank Balance");
+            }
         } else {
             return prepareResponse("ERROR", "Something went wrong with template", null, null, null);
         }
@@ -36,8 +41,7 @@ public class EmailFormatter {
     }
 
     private File getFile(TemplateRequest templateRequest) {
-        File emailTemplateFile = new File(EMAIL_DIRECTORY_PATH + templateRequest.getNotificationTemplateName() + HTML_SUFFIX);
-        return emailTemplateFile;
+        return new File(EMAIL_DIRECTORY_PATH + templateRequest.getNotificationTemplateName() + HTML_SUFFIX);
     }
 
     private Context prepareContext(Map<String, Object> notificationParametersMap) {
@@ -47,10 +51,9 @@ public class EmailFormatter {
     }
 
     private Map<String, Object> getParamsFromRequest(TemplateRequest templateRequest) {
-        Map<String, Object> notificationParametersMap = templateRequest.getNotificationParameters().stream()
+        return templateRequest.getNotificationParameters().stream()
                 .collect(Collectors.toMap(
                         NotificationParameter::getNotificationParameterName,
                         NotificationParameter::getNotificationParameterValue));
-        return notificationParametersMap;
     }
 }

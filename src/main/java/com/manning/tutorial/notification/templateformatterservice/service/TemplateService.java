@@ -17,8 +17,7 @@ public class TemplateService {
             case "EMAIL":
                 return emailFormatter.format(templateRequest);
             case "SMS":
-//                return smsFormatter.format(templateRequest);
-                return null;
+                return smsFormatter.format(templateRequest);
             default:
                 return prepareErrorResponse();
         }
