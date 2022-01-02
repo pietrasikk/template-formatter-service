@@ -15,7 +15,7 @@ class TemplateController {
 
     private final TemplateService templateService;
 
-    @PostMapping(path = "/notifications/templates",
+    @PostMapping(path = "/api/notifications/templates",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public TemplateResponse getNotificationTemplate(@RequestBody TemplateRequest templateRequest) {
