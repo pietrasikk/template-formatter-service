@@ -5,6 +5,7 @@ import com.manning.tutorial.notification.templateformatterservice.model.Template
 import com.manning.tutorial.notification.templateformatterservice.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,5 +21,10 @@ class TemplateController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public TemplateResponse getNotificationTemplate(@RequestBody TemplateRequest templateRequest) {
         return templateService.format(templateRequest);
+    }
+
+    @GetMapping("/api/notifications/templates/healthcheck")
+    public String healthCheck (){
+        return "UP";
     }
 }
